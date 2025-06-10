@@ -1,6 +1,6 @@
 # Fixed Sister (Load Balancing)
 
-# NGINX Load Balancer Configuration for Voting App
+# Penjelasan Konfigurasi `Nginx`
 
 Konfigurasi ini digunakan untuk membangun **load balancer** menggunakan **NGINX** yang mendistribusikan trafik ke beberapa backend server aplikasi voting.
 
@@ -109,6 +109,40 @@ proxy_temp_file_write_size 128k;
 ```
 
 * Menyesuaikan waktu tunggu dan buffer agar performa stabil meski trafik tinggi.
+
+---
+
+# Penjelasan Konfigurasi `docker-compose.yml`
+
+Proyek ini menggunakan **Docker Compose** untuk menjalankan **NGINX** sebagai load balancer. Konfigurasi NGINX diarahkan ke file `nginx.conf` untuk mendistribusikan trafik ke beberapa backend server.
+
+---
+
+## Isi `docker-compose.yml`
+
+```yaml
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "9030:9030"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: always
+```
+
+### Penjelasan:
+
+| Bagian            | Penjelasan                                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| `version: '3'`    | Versi format Compose file.                                                                                   |
+| `services`        | Mendefinisikan layanan yang dijalankan dalam container.                                                      |
+| `nginx`           | Nama service, menjalankan image `nginx:latest`.                                                              |
+| `ports`           | Memetakan port 9030 di host ke port 9030 di container.                                                       |
+| `volumes`         | Menggunakan file `nginx.conf` lokal sebagai konfigurasi NGINX di dalam container. File bersifat *read-only*. |
+| `restart: always` | Container akan otomatis restart jika terjadi crash atau reboot.                                              |
 
 ---
 
